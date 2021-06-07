@@ -11,14 +11,21 @@ import static models.Interface.NAME_SPECIALITY;
 public class Solver {
     private static int MAX_HOUR = 35;
 
-    Instance instance;
+    private Instance instance;
 
     public Solver(Instance instance) {
         this.instance = instance;
     }
 
-    long timeout = Long.MAX_VALUE;
-    long start;
+    private long timeout = Long.MAX_VALUE;
+    private long start;
+
+    private boolean verbose = false;
+
+    public void solve(int timeout, boolean verbose) {
+        this.verbose = verbose;
+        solve(timeout);
+    }
 
     public void solve(int timeout) {
         start = System.currentTimeMillis();
@@ -26,6 +33,7 @@ public class Solver {
 
         explore(new State(new int[instance.formations.length],new int[instance.interfaces.length],0));
     }
+
 
 
     public void printSolution(boolean full) {
@@ -89,7 +97,7 @@ public class Solver {
         if(state.index == instance.formations.length) {
             double cost = state.computeCost(instance);
             if(cost < bestCost) {
-                System.out.println("Better solution: " + cost);
+                if(verbose) System.out.println("Better solution: " + cost);
                 bestAffectation = state.affectation;
                 bestCost = (cost);
             }
@@ -136,9 +144,12 @@ public class Solver {
         return interfaces;
     }
 
+
     private boolean isCompatible(State state, Formation formation, Interface anInterface) {
         if(state.index == 0)
             return true;
+
+        int dayHour = 0;
 
         // We check the formation BACKWARD
         for(int i = state.index - 1; i >= 0 ; i--) {
@@ -147,7 +158,16 @@ public class Solver {
                 return true;
 
             if(state.affectation[i] == anInterface.id) {
-                if(formation.startHour <= instance.formations[i].endHour) // If overlapping with
+                // If the end our is after OR the same that the start hour, it is not valid
+                // after => one previous formation end after the starting date so incompatible
+                // same => our interface cannot teleport, therefore, not compatible
+                if(formation.startHour <= instance.formations[i].endHour)
+                    return false;
+
+                // Summing number of hours per day
+                dayHour += instance.formations[i].endHour - instance.formations[i].startHour;
+                // If working would be more than 8 hours for THIS day is is not compatible
+                if(dayHour + (formation.endHour-formation.startHour) >= 8)
                     return false;
             }
         }
