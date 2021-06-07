@@ -59,7 +59,13 @@ public class Tests {
                     System.out.println("[" + index + "] started estimate end ~" + getEstimate(index*timeStep*count));
 
                     // Computing solution
-                    Solution[] sol = tests(count, index*timeStep);
+                    Solution[] sol;
+                    try {
+                        sol = tests(count, index*timeStep);
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                        continue;
+                    }
 
                     // Saving in the excel file
                     Row row1 = sheet.createRow(index);
@@ -137,15 +143,14 @@ public class Tests {
         return (double) sum/sols.length;
     }
 
-    public static Solution[] tests(int count, int timeout) {
+    public static Solution[] tests(int count, int timeout) throws ExecutionException, InterruptedException {
 
         Solution[] sols = new Solution[count];
 
         for (int i = 0; i < count; i++) {
             //System.out.println("[tests] " + i + "/" + count);
             Instance instance = InstanceUtils.formatInstance(new InstanceGenerator().getInstance());
-            Solver solver = new Solver(instance).solve(timeout);
-            sols[i] = solver.computerSolution();
+            sols[i] = new Solver(instance).solve(timeout).get();
         }
         return sols;
     }

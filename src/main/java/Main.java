@@ -1,22 +1,18 @@
 import models.Instance;
 import models.Solution;
-import utils.InstanceUtils;
+
+import java.util.concurrent.ExecutionException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         InstanceGenerator instanceGenerator = new InstanceGenerator();
         Instance instance = instanceGenerator.getInstance();
 
-        instance = InstanceUtils.formatInstance(instance);
-
-        System.out.println(instance);
-        System.out.println("----------");
-
         Solver solver = new Solver(instance);
-        solver.solve(1000);
-        solver.printSolution(false);
+        Solution solution = solver.solve(1000).get();
+
     }
 
 
