@@ -27,14 +27,36 @@ public class Solver {
         solve(timeout);
     }
 
-    public void solve(int timeout) {
+    public Solver solve(int timeout) {
         start = System.currentTimeMillis();
         this.timeout = timeout;
 
         explore(new State(new int[instance.formations.length],new int[instance.interfaces.length],0));
+        return this;
     }
 
 
+    public Solution computerSolution() {
+        if(bestAffectation == null)
+            return null;
+
+        Solution solution = new Solution();
+        solution.affectations = bestAffectation;
+        solution.interfacesHours = new int[instance.interfaces.length];
+        solution.cost = bestCost;
+
+        for(int i = 0 ; i < bestAffectation.length; i++) {
+            solution.interfacesHours[bestAffectation[i]]+= instance.formations[i].endHour - instance.formations[i].startHour;
+
+            if(instance.interfaces[bestAffectation[i]].specialty[instance.formations[i].speciality])
+                solution.matchingSpeciality++;
+
+            if(instance.interfaces[bestAffectation[i]].skills[instance.formations[i].skill])
+                solution.matchingSkills++;
+        }
+
+        return solution;
+    }
 
     public void printSolution(boolean full) {
 
@@ -53,7 +75,6 @@ public class Solver {
         int matchingSkills = 0;
 
         int[] interfacesHours = new int[instance.interfaces.length];
-
 
         for(int i = 0 ; i < bestAffectation.length; i++) {
 
@@ -82,7 +103,6 @@ public class Solver {
         System.out.println("Stats: matchingSpeciality: " + matchingSpeciality +"/" + bestAffectation.length + " and matchingSkills: " + matchingSkills + "/" + bestAffectation.length);
         System.out.println("hours " + Arrays.toString(interfacesHours));
         System.out.println("nodeExplored " + nodeExplored);
-        //System.out.println("SD " + calculateSD(interfacesHours));
     }
 
     int[] bestAffectation = null;
