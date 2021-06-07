@@ -19,7 +19,8 @@ public class InstanceGenerator {
 
     public int dimensionArea = 200;
 
-    public int NBR_COMPETENCES = 2;
+    // If you want to change it, you have to look at generateInterfaces()
+    public static int NBR_COMPETENCES = 2;
 
     public int NBR_CENTRES_FORMATION = 5;
     public int NBR_SPECIALITES = NBR_CENTRES_FORMATION;
@@ -33,11 +34,10 @@ public class InstanceGenerator {
 
     public InstanceGenerator() { }
 
-    public InstanceGenerator(int nb_learner, int nb_interface, int dimensionArea, int NBR_COMPETENCES, int NBR_CENTRES_FORMATION, String[] NOMS_SPECIALITES) {
+    public InstanceGenerator(int nb_learner, int nb_interface, int dimensionArea, int NBR_CENTRES_FORMATION, String[] NOMS_SPECIALITES) {
         this.nb_learner = nb_learner;
         this.nb_interface = nb_interface;
         this.dimensionArea = dimensionArea;
-        this.NBR_COMPETENCES = NBR_COMPETENCES;
         this.NBR_CENTRES_FORMATION = NBR_CENTRES_FORMATION;
         this.NBR_SPECIALITES = NBR_CENTRES_FORMATION;
         this.NOMS_SPECIALITES = NOMS_SPECIALITES;

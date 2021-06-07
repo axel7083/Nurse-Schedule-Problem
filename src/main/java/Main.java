@@ -10,12 +10,12 @@ public class Main {
 
         instance = InstanceUtils.formatInstance(instance);
 
-        //System.out.println(instance);
-        //System.out.println("----------");
+        System.out.println(instance);
+        System.out.println("----------");
 
         Solver solver = new Solver(instance);
         solver.solve(2000);
-        //solver.printSolution(false);
+        solver.printSolution(false);
     }
 
 }

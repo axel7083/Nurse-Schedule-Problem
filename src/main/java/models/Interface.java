@@ -4,7 +4,8 @@ public class Interface {
 
     public static String NAME_SKILLS[] = {
             "COMPETENCE_SIGNES",
-            "COMPETENCE_CODAGE"};
+            "COMPETENCE_CODAGE",
+    "COMPETENCE_BONUS"};
 
     public static String NAME_SPECIALITY[] = {
             "SPECIALITE_MENUISERIE",

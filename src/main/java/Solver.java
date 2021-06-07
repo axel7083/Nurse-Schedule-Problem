@@ -10,17 +10,21 @@ import static models.Interface.NAME_SPECIALITY;
 
 public class Solver {
     private static int MAX_HOUR = 35;
-
     private Instance instance;
+
+    private long timeout;
+    private long start;
+
+    private boolean verbose = false;
+
+    private int[] bestAffectation = null;
+    private double bestCost = Double.MAX_VALUE;
+
+    private long nodeExplored = 0;
 
     public Solver(Instance instance) {
         this.instance = instance;
     }
-
-    private long timeout = Long.MAX_VALUE;
-    private long start;
-
-    private boolean verbose = false;
 
     public void solve(int timeout, boolean verbose) {
         this.verbose = verbose;
@@ -33,8 +37,6 @@ public class Solver {
 
         explore(new State(new int[instance.formations.length],new int[instance.interfaces.length],0));
     }
-
-
 
     public void printSolution(boolean full) {
 
@@ -85,12 +87,7 @@ public class Solver {
         //System.out.println("SD " + calculateSD(interfacesHours));
     }
 
-    int[] bestAffectation = null;
-    double bestCost = Double.MAX_VALUE;
-
-    long nodeExplored = 0;
-
-    public void explore(State state) {
+    private void explore(State state) {
         nodeExplored++;
 
         // We reached a leave
@@ -122,7 +119,7 @@ public class Solver {
         });
     }
 
-    public ArrayList<Interface> findKBest(State state, int k) {
+    private ArrayList<Interface> findKBest(State state, int k) {
         // Get the formation we search the best
         Formation formation = instance.formations[state.index];
 
