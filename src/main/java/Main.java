@@ -1,4 +1,5 @@
 import models.Instance;
+import models.Solution;
 import utils.InstanceUtils;
 
 public class Main {
@@ -14,8 +15,9 @@ public class Main {
         System.out.println("----------");
 
         Solver solver = new Solver(instance);
-        solver.solve(2000);
+        solver.solve(1000);
         solver.printSolution(false);
     }
+
 
 }
