@@ -16,7 +16,7 @@ public class Tests {
 
     public static void main(String[] args) {
         try {
-            runTests(20,50, 1000);
+            runTests(15,1000, 100);
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -34,6 +34,9 @@ public class Tests {
         header.createCell(2).setCellValue("Matching skills (Average)");
         header.createCell(3).setCellValue("Matching speciality (Average)");
         header.createCell(4).setCellValue("Run count");
+        header.createCell(5).setCellValue("Average cost");
+        header.createCell(6).setCellValue("Not found count");
+        header.createCell(7).setCellValue("Impossible count");
 
         int numOfCores = Runtime.getRuntime().availableProcessors();
         System.out.println("Running on " +numOfCores + " cores");
@@ -65,6 +68,10 @@ public class Tests {
                     row1.createCell(2).setCellValue(averageSkills(sol));
                     row1.createCell(3).setCellValue(averageSpeciality(sol));
                     row1.createCell(4).setCellValue(count);
+                    row1.createCell(5).setCellValue(averageCosts(sol));
+                    row1.createCell(6).setCellValue(notFoundCount(sol));
+                    row1.createCell(7).setCellValue(impossibleCount(sol));
+
 
                     // Informing finish
                     System.out.println("[" + index + "] finish");
@@ -100,6 +107,32 @@ public class Tests {
         int sum = 0;
         for (Solution e : sols) {
             sum+= (e != null)?e.matchingSpeciality:0;
+        }
+        return (double) sum/sols.length;
+    }
+
+    public static int notFoundCount(Solution[] sols) {
+        int count = 0;
+        for (Solution e : sols) {
+            if(e.failReason == Solution.FailReason.TIMEOUT)
+                count++;
+        }
+        return count;
+    }
+
+    public static int impossibleCount(Solution[] sols) {
+        int count = 0;
+        for (Solution e : sols) {
+            if(e.failReason == Solution.FailReason.IMPOSSIBLE)
+                count++;
+        }
+        return count;
+    }
+
+    public static double averageCosts(Solution[] sols) {
+        int sum = 0;
+        for (Solution e : sols) {
+            sum+= (e != null)?e.cost:0;
         }
         return (double) sum/sols.length;
     }

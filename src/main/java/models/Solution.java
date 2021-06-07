@@ -6,4 +6,10 @@ public class Solution {
     public double cost = 0;
     public int matchingSpeciality = 0;
     public int matchingSkills = 0;
+    public FailReason failReason = null;
+
+    public enum FailReason {
+        TIMEOUT,
+        IMPOSSIBLE
+    }
 }

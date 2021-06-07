@@ -32,6 +32,8 @@ public class Solver {
         this.timeout = timeout;
 
         explore(new State(new int[instance.formations.length],new int[instance.interfaces.length],0));
+        if(bestAffectation == null)
+            reason = Solution.FailReason.IMPOSSIBLE;
         return this;
     }
 
@@ -44,6 +46,7 @@ public class Solver {
         solution.affectations = bestAffectation;
         solution.interfacesHours = new int[instance.interfaces.length];
         solution.cost = bestCost;
+        solution.failReason = reason;
 
         for(int i = 0 ; i < bestAffectation.length; i++) {
             solution.interfacesHours[bestAffectation[i]]+= instance.formations[i].endHour - instance.formations[i].startHour;
@@ -110,6 +113,8 @@ public class Solver {
 
     long nodeExplored = 0;
 
+    private Solution.FailReason reason = null;
+
     public void explore(State state) {
         nodeExplored++;
 
@@ -125,8 +130,11 @@ public class Solver {
         }
 
         // Timeout
-        if(System.currentTimeMillis() - start > timeout)
+        if(System.currentTimeMillis() - start > timeout) {
+            if(bestAffectation == null)
+                reason = Solution.FailReason.IMPOSSIBLE;
             return;
+        }
 
         ArrayList<Interface> interfacesAvailable = findKBest(state,2);
 
