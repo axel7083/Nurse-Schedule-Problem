@@ -3,6 +3,9 @@ import models.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static models.Formation.WEEK_DAY;
 import static models.Interface.NAME_SKILLS;
@@ -21,27 +24,36 @@ public class Solver {
     private double bestCost = Double.MAX_VALUE;
 
     private long nodeExplored = 0;
+    private Solution.FailReason reason = null;
 
     public Solver(Instance instance) {
         this.instance = instance;
     }
 
-    public void solve(int timeout, boolean verbose) {
+    public Future<Solution> solve(int timeout, boolean verbose) {
         this.verbose = verbose;
-        solve(timeout);
+        return solve(timeout);
     }
 
-    public Solver solve(int timeout) {
-        start = System.currentTimeMillis();
-        this.timeout = timeout;
+    public Future<Solution> solve(int timeout) {
+        CompletableFuture<Solution> completableFuture = new CompletableFuture<>();
+        Executors.newCachedThreadPool().submit(() -> {
+            start = System.currentTimeMillis();
+            this.timeout = timeout;
 
-        explore(new State(new int[instance.formations.length],new int[instance.interfaces.length],0));
-        if(bestAffectation == null)
-            reason = Solution.FailReason.IMPOSSIBLE;
-        return this;
+            explore(new State(new int[instance.formations.length],new int[instance.interfaces.length],0));
+            if(bestAffectation == null)
+                reason = Solution.FailReason.IMPOSSIBLE;
+
+            completableFuture.complete(computeSolution());
+            return null;
+        });
+        return completableFuture;
     }
 
-    public Solution computerSolution() {
+
+    public Solution computeSolution() {
+
         Solution solution = new Solution();
         solution.failReason = reason;
 
@@ -111,8 +123,6 @@ public class Solver {
         System.out.println("hours " + Arrays.toString(interfacesHours));
         System.out.println("nodeExplored " + nodeExplored);
     }
-
-    private Solution.FailReason reason = null;
 
     public void explore(State state) {
 

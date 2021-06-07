@@ -5,6 +5,7 @@
  */
 
 import models.*;
+import utils.InstanceUtils;
 
 import java.util.Random;
 
@@ -56,12 +57,12 @@ public class InstanceGenerator {
     Random rand = new Random();;
 
     public Instance getInstance() {
-        return new Instance(
+        return InstanceUtils.formatInstance(new Instance(
                 generateInterfaces(),
                 generateCenters(),
                 generateLearners(),
                 generateFormations()
-        );
+        ));
     }
 
     private Interface[] generateInterfaces() {
