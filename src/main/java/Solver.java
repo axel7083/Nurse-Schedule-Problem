@@ -51,15 +51,18 @@ public class Solver {
         return completableFuture;
     }
 
+
     public Solution computeSolution() {
-        if(bestAffectation == null)
-            return null;
 
         Solution solution = new Solution();
+        solution.failReason = reason;
+
+        if(bestAffectation == null)
+            return solution;
+
         solution.affectations = bestAffectation;
         solution.interfacesHours = new int[instance.interfaces.length];
         solution.cost = bestCost;
-        solution.failReason = reason;
 
         for(int i = 0 ; i < bestAffectation.length; i++) {
             solution.interfacesHours[bestAffectation[i]]+= instance.formations[i].endHour - instance.formations[i].startHour;

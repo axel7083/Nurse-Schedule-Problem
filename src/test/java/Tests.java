@@ -16,7 +16,7 @@ public class Tests {
 
     public static void main(String[] args) {
         try {
-            runTests(15,1000, 100);
+            runTests(15,500, 100);
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -35,8 +35,8 @@ public class Tests {
         header.createCell(3).setCellValue("Matching speciality (Average)");
         header.createCell(4).setCellValue("Run count");
         header.createCell(5).setCellValue("Average cost");
-        header.createCell(6).setCellValue("Not found count");
-        header.createCell(7).setCellValue("Impossible count");
+        header.createCell(6).setCellValue("Not found");
+        header.createCell(7).setCellValue("Impossible");
 
         int numOfCores = Runtime.getRuntime().availableProcessors();
         System.out.println("Running on " +numOfCores + " cores");
@@ -120,7 +120,7 @@ public class Tests {
     public static int notFoundCount(Solution[] sols) {
         int count = 0;
         for (Solution e : sols) {
-            if(e.failReason == Solution.FailReason.TIMEOUT)
+            if(e == null || e.failReason == Solution.FailReason.TIMEOUT)
                 count++;
         }
         return count;
@@ -129,7 +129,7 @@ public class Tests {
     public static int impossibleCount(Solution[] sols) {
         int count = 0;
         for (Solution e : sols) {
-            if(e.failReason == Solution.FailReason.IMPOSSIBLE)
+            if(e == null || e.failReason == Solution.FailReason.IMPOSSIBLE)
                 count++;
         }
         return count;
