@@ -125,7 +125,6 @@ public class Solver {
     }
 
     public void explore(State state) {
-
         nodeExplored++;
 
         // We reached a leave
@@ -156,7 +155,6 @@ public class Solver {
 
             if(nState.computeCost(instance) < bestCost)
                 explore(nState);
-
         });
     }
 

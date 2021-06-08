@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Arrays;
+
 public class Solution {
     public int[] affectations = null;
     public int[] interfacesHours = null;
@@ -11,5 +13,36 @@ public class Solution {
     public enum FailReason {
         TIMEOUT,
         IMPOSSIBLE
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if(failReason != null)
+            switch (failReason) {
+                case TIMEOUT:
+                    stringBuilder.append("{ FailReason: TIMEOUT }");
+                    break;
+                case IMPOSSIBLE:
+                    stringBuilder.append("{ FailReason: IMPOSSIBLE }");
+                    break;
+            }
+        else
+        {
+            stringBuilder.append("{ affectations: ");
+            stringBuilder.append(Arrays.toString(affectations));
+            stringBuilder.append(",\ninterfacesHours: ");
+            stringBuilder.append(Arrays.toString(interfacesHours));
+            stringBuilder.append(",\nmatchingSpeciality: ");
+            stringBuilder.append(matchingSpeciality);
+            stringBuilder.append(",\nmatchingSkills: ");
+            stringBuilder.append(matchingSkills);
+            stringBuilder.append(",\ncost: ");
+            stringBuilder.append(cost);
+            stringBuilder.append(" }");
+        }
+
+        return stringBuilder.toString();
     }
 }

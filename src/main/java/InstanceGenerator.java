@@ -32,6 +32,27 @@ public class InstanceGenerator {
             "SPECIALITE_INFORMATIQUE",
             "SPECIALITE_CUISINE"};
 
+    public static class Argument {
+        public int nb_learner;
+        public int nb_interface;
+        public int dimensionArea;
+        public int nb_centres;
+        public String[] name_speciality;
+    }
+
+    public InstanceGenerator(Argument argument) {
+        if(argument == null)
+            return;
+
+        nb_learner = argument.nb_learner;
+        nb_interface = argument.nb_interface;
+        dimensionArea = argument.dimensionArea;
+        NBR_CENTRES_FORMATION = argument.nb_centres;
+        NBR_SPECIALITES = argument.nb_centres;
+        if(argument.name_speciality!= null)
+            NOMS_SPECIALITES = argument.name_speciality;
+    }
+
 
     public InstanceGenerator() { }
 

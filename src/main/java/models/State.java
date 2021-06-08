@@ -22,16 +22,15 @@ public class State {
     public double computeCost(Instance instance) {
         Formation[] previousFormation = new Formation[instance.interfaces.length];
 
-        double[] distances = new double[affectation.length];
+        double[] distances = new double[instance.interfaces.length];
         int penalty = 0;
 
         for (int i = 0; i < index; i++) {
-
             Formation formation = instance.formations[i];
             Interface anInterface = instance.interfaces[affectation[i]];
-
             // If it is the first time of the day moving
             if(previousFormation[affectation[i]]==null || previousFormation[affectation[i]].day != formation.day) {
+
                 distances[affectation[i]] += distance(
                         instance.centres[0].coordinates // SESSAD centre
                         ,instance.centres[formation.speciality].coordinates);
@@ -49,7 +48,6 @@ public class State {
                 penalty++;
             }
         }
-
         //min z = 0.5 ∗ (moyd(s) + ecartd(s)) + 0.5 ∗ fcorr ∗ penalite(s)
         double[] distancesSD = calculateSD(distances);
         return 0.5*(distancesSD[1]+distancesSD[0])+0.5*instance.fcorr*penalty;
