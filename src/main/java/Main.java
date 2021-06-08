@@ -13,6 +13,8 @@ public class Main {
         // Getting instance from generator
         Instance instance = instanceGenerator.getInstance();
 
+        System.out.println(instance);
+
         // Creating a solver
         Solver solver = new Solver(instance);
 
@@ -22,6 +24,5 @@ public class Main {
         // Printing solution
         System.out.println(solution);
     }
-
 
 }

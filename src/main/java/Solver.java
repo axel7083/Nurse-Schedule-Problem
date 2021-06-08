@@ -3,9 +3,7 @@ import models.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import static models.Formation.WEEK_DAY;
 import static models.Interface.NAME_SKILLS;
@@ -37,7 +35,9 @@ public class Solver {
 
     public Future<Solution> solve(int timeout) {
         CompletableFuture<Solution> completableFuture = new CompletableFuture<>();
-        Executors.newCachedThreadPool().submit(() -> {
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(1);
+        threadPool.submit(() -> {
             start = System.currentTimeMillis();
             this.timeout = timeout;
 
@@ -46,8 +46,9 @@ public class Solver {
                 reason = Solution.FailReason.IMPOSSIBLE;
 
             completableFuture.complete(computeSolution());
-            return null;
         });
+        // Explicitly saying we will no add more element
+        threadPool.shutdown();
         return completableFuture;
     }
 
